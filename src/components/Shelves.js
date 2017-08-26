@@ -22,9 +22,8 @@ class Shelves extends Component {
     this.setState((prevState) => (
         {[oldShelf]: prevState[oldShelf].filter((b) =>  b.id !== book.id)}
     ))
-
-    BooksAPI.update(book, shelf)
-      .then((dados) => console.log(dados))
+    console.log('removing...')
+    BooksAPI.update(book, shelf).catch((erro) => console.log(erro))
   }
 
   componentDidMount(){
