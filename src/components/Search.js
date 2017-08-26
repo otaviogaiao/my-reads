@@ -4,6 +4,7 @@ import * as BooksAPI from '../BooksAPI';
 import SearchBar from './SearchBar';
 import Book from './Book';
 import {debounce} from 'throttle-debounce';
+import Loader from 'react-loader';
 
 class Search extends Component {
 
@@ -11,7 +12,8 @@ class Search extends Component {
     super(props);
     this.state = {
       books: [],
-      myBooks: []
+      myBooks: [],
+      loaded: true
     }
     // this.searchBooks = this.searchBooks.bind(this);
     this.searchBooks = debounce(400,this.searchBooks);
@@ -24,11 +26,12 @@ class Search extends Component {
   searchBooks = (query) =>{
     console.log(query)
     if(query.length > 2){
+      this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
        if(books.error){
-         this.setState({books: []})
+         this.setState({books: [], loaded: true})
        }else{
-        this.setState({books: this.setShelvesOnBooks(books)})
+        this.setState({books: this.setShelvesOnBooks(books), loaded: true})
        }
       })
     }
@@ -70,9 +73,11 @@ class Search extends Component {
           <SearchBar searchBookHandler={this.searchBooks}/>
         </div>
         <div className="search-books-results">
-          <ol className="books-grid">
-            {this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf}/>)}
-          </ol>
+          <Loader loaded={this.state.loaded}>
+            <ol className="books-grid">
+              {this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf}/>)}
+            </ol>
+          </Loader>
         </div>
       </div>
     );

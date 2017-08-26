@@ -2,56 +2,70 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import * as BooksAPI from '../BooksAPI';
 import Shelf from './Shelf';
+import Loader from 'react-loader';
 
 class Shelves extends Component {
 
   state = {
-      read: [],
-      wantToRead: [],
-      currentlyReading: []
+      shelves: {
+        read: [],
+        wantToRead: [],
+        currentlyReading: []
+      },
+      loaded: false
   }
 
   removeBookFromShelf = (book, shelf) => {
     let oldShelf = book.shelf;
     book.shelf = shelf;
     if(shelf !== 'none'){
-      this.setState((prevState) => (
-         {[shelf]: prevState[shelf].concat([book])}
-      ))
+      this.setState((prevState) => {
+          prevState.shelves[shelf] = prevState.shelves[shelf].concat([book]);
+          return prevState;
+        }
+      )
     }
-    this.setState((prevState) => (
-        {[oldShelf]: prevState[oldShelf].filter((b) =>  b.id !== book.id)}
-    ))
-    console.log('removing...')
+    this.setState((prevState) => {
+        prevState.shelves[oldShelf] = prevState.shelves[oldShelf].filter((b) =>  b.id !== book.id);
+        return prevState;
+      }
+    )
     BooksAPI.update(book, shelf).catch((erro) => console.log(erro))
   }
 
   componentDidMount(){
     BooksAPI.getAll()
       .then((books) => {
-        for(let book of books){
-          this.setState((prevState) => prevState[book.shelf].push(book))
-        }
-      })
+        this.setState((prevState) => {
+          for(let book of books){
+            prevState.shelves[book.shelf] = prevState.shelves[book.shelf].concat([book])
+          }
+          prevState.loaded = true
+          return prevState
+        })
+      }).then(this.setState({loaded: false}))
       .catch((erro) => console.log(erro))
   }
 
   render(){
-    let keys = Object.keys(this.state);
+    let keys = Object.keys(this.state.shelves);
     return (
-      <div className="list-books">
-        <div className="list-books-title">
-          <h1>MyReads</h1>
-        </div>
-        <div className="list-books-content">
-          <div>
-            { keys.map((key) => <Shelf books={this.state[key]} shelf={key} key={key} removeBookFromShelf={this.removeBookFromShelf}/>) }
+        <div className="list-books">
+          <div className="list-books-title">
+            <h1>MyReads</h1>
           </div>
+        <Loader loaded={this.state.loaded}>
+            <div className="list-books-content">
+              <div>
+                { keys.map((key) => <Shelf books={this.state.shelves[key]} shelf={key} key={key} removeBookFromShelf={this.removeBookFromShelf}/>) }
+              </div>
+            </div>
+            <div className="open-search">
+              <Link to="/search">Add a book</Link>
+            </div>
+        </Loader>
         </div>
-        <div className="open-search">
-          <Link to="/search">Add a book</Link>
-        </div>
-      </div>
+
     );
   }
 }
