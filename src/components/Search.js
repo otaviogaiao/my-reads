@@ -6,6 +6,7 @@ import Book from './Book';
 import {debounce} from 'throttle-debounce';
 import Loader from 'react-loader';
 
+
 class Search extends Component {
 
   constructor(props){
@@ -27,6 +28,7 @@ class Search extends Component {
     if(query.length > 2){
       this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
+        console.log('Books', books)
        if(books.error){
          this.setState({books: [], loaded: true})
        }else{
@@ -74,7 +76,7 @@ class Search extends Component {
         <div className="search-books-results">
           <Loader loaded={this.state.loaded}>
             <ol className="books-grid">
-              {this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf}/>)}
+              {this.state.books && this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf}/>)}
             </ol>
           </Loader>
         </div>

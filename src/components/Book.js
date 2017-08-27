@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
+import Modal from './Modal'
 
 class Book extends Component {
 
   constructor(props){
     super(props);
-    this.state = {}
+    this.state = {
+      modalOpen: false
+    }
+    this.openModal = this.openModal.bind(this)
   }
 
   componentWillMount(){
@@ -14,6 +18,14 @@ class Book extends Component {
   changeShelf = (e) => {
     this.setState({shelf: e.target.value});
     this.props.handleChangeShelf(this.props.book, e.target.value)
+  }
+
+  openModal() {
+    this.setState({modalOpen: true})
+  }
+
+  closeModal = () => {
+    this.setState({modalOpen: false})
   }
 
   render(){
@@ -36,6 +48,10 @@ class Book extends Component {
           <div className="book-authors">
             {this.props.book.authors.map((author, index) => <span key={index}>{author}</span>)}
           </div>
+          <div>
+            <span onClick={() => this.openModal()}>See details</span>
+          </div>
+          {this.state.modalOpen && <Modal book={this.props.book} onClose={this.closeModal}/>}
       </div>
     )
   }

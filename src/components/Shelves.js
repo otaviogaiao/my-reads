@@ -57,7 +57,8 @@ class Shelves extends Component {
         <Loader loaded={this.state.loaded}>
             <div className="list-books-content">
               <div>
-                { keys.map((key) => <Shelf books={this.state.shelves[key]} shelf={key} key={key} removeBookFromShelf={this.removeBookFromShelf}/>) }
+                { keys.map((key) => <Shelf books={this.state.shelves[key]} shelf={key} key={key} removeBookFromShelf={this.removeBookFromShelf}
+                                      openModal={this.openModal} closeModal={this.closeModal}/>) }
               </div>
             </div>
             <div className="open-search">
