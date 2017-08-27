@@ -24,7 +24,6 @@ class Search extends Component {
   }
 
   searchBooks = (query) =>{
-    console.log(query)
     if(query.length > 2){
       this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
