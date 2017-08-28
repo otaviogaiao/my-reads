@@ -46,7 +46,7 @@ class Book extends Component {
           </div>
           <div className="book-title">{this.props.book.title}</div>
           <div className="book-authors">
-            {this.props.book.authors.map((author, index) => <span key={index}>{author}</span>)}
+            {this.props.book.authors && this.props.book.authors.map((author, index) => <span key={index}>{author}</span>)}
           </div>
           <div>
             <span onClick={() => this.openModal()}>See details</span>
