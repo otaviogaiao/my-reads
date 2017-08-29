@@ -19,9 +19,10 @@ class Modal extends Component {
           <p>{this.props.book.description}</p>
           <p><strong>Categories: </strong>{this.props.book.categories.join(" ,")}</p>
           <p><strong>Publisher: </strong>{this.props.book.publisher}</p>
+          <p><strong>Date Published: </strong>{this.props.book.publishedDate}</p>
         </div>
         <div className="modal-footer">
-          <h3>Modal Footer</h3>
+          <h3></h3>
         </div>
       </div>
     )

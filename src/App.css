@@ -133,6 +133,10 @@ body, .app {
   color: #999;
 }
 
+.book-detail-link {
+  cursor: pointer;
+}
+
 .book-top {
   position: relative;
   height: 200px;

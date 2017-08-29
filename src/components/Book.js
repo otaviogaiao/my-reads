@@ -49,7 +49,7 @@ class Book extends Component {
             {this.props.book.authors && this.props.book.authors.map((author, index) => <span key={index}>{author}</span>)}
           </div>
           <div>
-            <span onClick={() => this.openModal()}>See details</span>
+            <span onClick={() => this.openModal()} className="book-detail-link">See details</span>
           </div>
           {this.state.modalOpen && <Modal book={this.props.book} onClose={this.closeModal}/>}
       </div>
