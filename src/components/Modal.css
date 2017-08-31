@@ -1,49 +1,99 @@
 /* Modal Header */
+
 .modal-header {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    /*background-color: #5cb85c;*/
+    background-color: #0D47A1;
     color: white;
 }
+
+
+/* Modal */
+
+.modal {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: bounding-box;
+    background: rgba(13, 71, 161, .5);
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.close {
+    cursor: pointer;
+}
+
 
 /* Modal Body */
-.modal-body {padding: 2px 16px;}
+
+.modal-body {
+    padding: 2px 16px;
+}
+
 
 /* Modal Footer */
+
 .modal-footer {
     padding: 2px 16px;
-    background-color: #5cb85c;
+    /*background-color: #5cb85c;*/
+    background-color: #0D47A1;
     color: white;
 }
 
+
 /* Modal Content */
+
 .modal-content {
     background-color: #fefefe;
-    z-index: 1;
+    z-index: 2;
     padding: 0;
     border: 1px solid #888;
     width: 45%;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19), 0 0 0 100000px rgba(0, 0, 0, .5);
-
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19), 0 0 0 100000px rgba(0, 0, 0, .5);
     animation-name: animatetop;
     animation-duration: 0.4s;
-
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 30%;
     max-height: 90%;
     overflow: auto;
     transform: translateY(-50%);
     margin: auto;
-
+    pointer-events: all;
 }
 
+
+/*.modal-outter-part {
+   position: fixed;
+   z-index: 1;
+   width: 100vw;
+   height: 100vh;
+   pointer-events: none;
+}*/
+
+
 /* Add Animation */
+
 @-webkit-keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }
 
 @keyframes animatetop {
-    from {top: -300px; opacity: 0}
-    to {top: 0; opacity: 1}
+    from {
+        top: -300px;
+        opacity: 0
+    }
+    to {
+        top: 0;
+        opacity: 1
+    }
 }

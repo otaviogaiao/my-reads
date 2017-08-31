@@ -14,6 +14,7 @@ class Search extends Component {
     this.state = {
       books: [],
       myBooks: [],
+      shelves: [],
       loaded: true
     }
     // this.searchBooks = this.searchBooks.bind(this);
@@ -21,14 +22,16 @@ class Search extends Component {
   }
 
   componentDidMount(){
-    BooksAPI.getAll().then((books) => {this.setState({myBooks: books})});
+    BooksAPI.getAllShelves().then((shelves) => {
+      BooksAPI.getAll().then((books) => {this.setState({myBooks: books, shelves: shelves})});
+    })
+
   }
 
   searchBooks = (query) =>{
     if(query.length > 2){
       this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
-        console.log('Books', books)
        if(books.error){
          this.setState({books: [], loaded: true})
        }else{
@@ -66,7 +69,6 @@ class Search extends Component {
 
 
   render(){
-    console.log(this.state)
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -76,7 +78,7 @@ class Search extends Component {
         <div className="search-books-results">
           <Loader loaded={this.state.loaded}>
             <ol className="books-grid">
-              {this.state.books && this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf}/>)}
+              {this.state.books && this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf} shelves={this.state.shelves}/>)}
             </ol>
           </Loader>
         </div>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Modal from './Modal';
 import StarRatingComponent from 'react-star-rating-component';
+import _ from 'lodash';
 
 class Book extends Component {
 
@@ -44,9 +45,9 @@ class Book extends Component {
             <div className="book-shelf-changer">
               <select value={this.state.shelf} onChange={this.changeShelf}>
                 <option value="none" disabled>Move to...</option>
-                <option value="currentlyReading">Currently Reading</option>
-                <option value="wantToRead">Want to Read</option>
-                <option value="read">Read</option>
+                {this.props.shelves.map((shelf) => {
+                  return <option value={shelf} key={shelf}>{_.startCase(shelf)}</option>
+                })}
                 <option value="none">None</option>
               </select>
             </div>
