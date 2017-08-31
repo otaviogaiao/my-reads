@@ -3,14 +3,16 @@ import {Link} from 'react-router-dom';
 import * as BooksAPI from '../BooksAPI';
 import Shelf from './Shelf';
 import Loader from 'react-loader';
-import NewShelf from './NewShelf';
 
 class Shelves extends Component {
 
   state = {
-      shelves: {},
-      loaded: false,
-      modalNewShelf: false
+      shelves: {
+        read: [],
+        wantToRead: [],
+        currentlyReading: []
+      },
+      loaded: false
   }
 
   removeBookFromShelf = (book, shelf) => {
@@ -32,21 +34,14 @@ class Shelves extends Component {
   }
 
   componentDidMount(){
-    //First, we get all sheves and put it on the state
-    BooksAPI.getAllShelves()
-      .then((shelves) => {
-        this.setState((prevState) => { //sets all shelves as states
-          for(let shelf of shelves){
-            prevState.shelves[shelf] = [];
-          }
-          return prevState;
-        });
+
         BooksAPI.getAll() //Then, we get all books from API and sets them in their shelves
           .then((books) => {
             this.setState((prevState) => {
               for(let book of books){
                  //we ignore books whose category doesnt exist anymore..
-                 //If the API had a bulk update, we would update the shelf of every book when its category is deleted.
+                //preparing for when we are able to create categories (It's kinda done in another branch, but since the API doesn't
+               //support it, I thought it better to remove it)
                 if(prevState.shelves.hasOwnProperty(book.shelf)){
                   prevState.shelves[book.shelf] = prevState.shelves[book.shelf].concat([book])
                 }
@@ -57,8 +52,6 @@ class Shelves extends Component {
             })
           }).then(this.setState({loaded: false}))
           .catch((erro) => console.log(erro))
-      })
-      .catch((erro) => console.log(erro));
   }
 
   //we close the modal and set the new shelve on the state if there is one
@@ -84,14 +77,12 @@ class Shelves extends Component {
             <div className="list-books-content">
               <div>
                 { keys.map((key) => <Shelf books={this.state.shelves[key]} shelf={key} key={key} shelves={keys} removeBookFromShelf={this.removeBookFromShelf}
-                                      openModal={this.openModal} closeModal={this.closeModal}/>) }
+                                      />) }
               </div>
             </div>
             <div className="open-search">
-              <button onClick={() => {this.setState({modalNewShelf: true})}}>Add a new shelf</button>
               <Link to="/search">Add a book</Link>
             </div>
-            {this.state.modalNewShelf && <NewShelf onClose={this.closeModal}/>}
         </Loader>
         </div>
 

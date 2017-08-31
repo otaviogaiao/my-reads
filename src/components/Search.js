@@ -14,7 +14,7 @@ class Search extends Component {
     this.state = {
       books: [],
       myBooks: [],
-      shelves: [],
+      shelves: ['read', 'wantToRead', 'currentlyReading'],
       loaded: true
     }
     // this.searchBooks = this.searchBooks.bind(this);
@@ -22,9 +22,7 @@ class Search extends Component {
   }
 
   componentDidMount(){
-    BooksAPI.getAllShelves().then((shelves) => {
-      BooksAPI.getAll().then((books) => {this.setState({myBooks: books, shelves: shelves})});
-    })
+    BooksAPI.getAll().then((books) => {this.setState({myBooks: books})});
 
   }
 
