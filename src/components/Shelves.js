@@ -68,6 +68,7 @@ class Shelves extends Component {
       if(newShelf && newShelf.length > 0){
         prevState.shelves[newShelf] = []
       }
+      console.log(prevState)
       return prevState;
     })
   }

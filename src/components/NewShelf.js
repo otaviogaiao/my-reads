@@ -16,12 +16,12 @@ class NewShelf extends Component {
   newShelf = '';
 
   createNewShelf(){
-    console.log('teste')
     if(this.state.value.length > 0){
       this.setState({loading: true})
       BooksAPI.addShelf(this.state.value).then(()=>{
         this.newShelf = this.state.value;
-        this.setState({loading: false})
+        this.setState({loading: false});
+        this.props.onClose(this.newShelf)
       }).catch((error) => {
         console.log(error);
         this.setState({loading: false})
@@ -34,7 +34,6 @@ class NewShelf extends Component {
   }
 
   render(){
-    console.log(this.state)
     return (
       <div className="modal">
         <div className="modal-content">
