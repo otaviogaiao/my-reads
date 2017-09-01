@@ -22,7 +22,7 @@ class Search extends Component {
   }
 
   componentDidMount(){
-    BooksAPI.getAll().then((books) => {this.setState({myBooks: books})});
+    BooksAPI.getAll().then((books) => {this.refs.root && this.setState({myBooks: books})});
 
   }
 
@@ -31,9 +31,10 @@ class Search extends Component {
       this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
        if(books.error){
-         this.setState({books: [], loaded: true})
+          this.refs.root && this.setState({books: [], loaded: true})
+        
        }else{
-        this.setState({books: this.setShelvesOnBooks(books), loaded: true})
+        this.refs.root && this.setState({books: this.setShelvesOnBooks(books), loaded: true})
        }
       })
     }
@@ -42,10 +43,10 @@ class Search extends Component {
   changeBookShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then((data) => {
       if(book.shelf !== 'none' && shelf === 'none'){
-        this.setState((prevState) => ({myBooks: prevState.myBooks.filter((b) => b.id !== book.id)}))
+        this.refs.root &&  this.setState((prevState) => ({myBooks: prevState.myBooks.filter((b) => b.id !== book.id)}))
       }else{
         book.shelf = shelf;
-        this.setState((prevState) => ({myBooks: prevState.myBooks.concat([book])}))
+        this.refs.root && this.setState((prevState) => ({myBooks: prevState.myBooks.concat([book])}))
       }
     })
   }
@@ -68,7 +69,7 @@ class Search extends Component {
 
   render(){
     return (
-      <div className="search-books">
+      <div className="search-books" ref="root">
         <div className="search-books-bar">
           <Link className="close-search" to="/">Close</Link>
           <SearchBar searchBookHandler={this.searchBooks}/>

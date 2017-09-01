@@ -19,7 +19,7 @@ class Shelves extends Component {
     let oldShelf = book.shelf;
     book.shelf = shelf;
     if(shelf !== 'none'){
-      this.setState((prevState) => {
+      this.refs.root && this.setState((prevState) => {
           prevState.shelves[shelf] = prevState.shelves[shelf].concat([book]);
           return prevState;
         }
@@ -37,7 +37,7 @@ class Shelves extends Component {
 
         BooksAPI.getAll() //Then, we get all books from API and sets them in their shelves
           .then((books) => {
-            this.setState((prevState) => {
+            this.refs.root && this.setState((prevState) => {
               for(let book of books){
                  //we ignore books whose category doesnt exist anymore..
                 //preparing for when we are able to create categories (It's kinda done in another branch, but since the API doesn't
@@ -50,18 +50,17 @@ class Shelves extends Component {
               prevState.loaded = true
               return prevState
             })
-          }).then(this.setState({loaded: false}))
+          }).then(this.refs.root && this.setState({loaded: false}))
           .catch((erro) => console.log(erro))
   }
 
   //we close the modal and set the new shelve on the state if there is one
   closeModal = (newShelf) => {
-    this.setState((prevState) => {
+    this.refs.root && this.setState((prevState) => {
       prevState.modalNewShelf = false;
       if(newShelf && newShelf.length > 0){
         prevState.shelves[newShelf] = []
       }
-      console.log(prevState)
       return prevState;
     })
   }
@@ -69,7 +68,7 @@ class Shelves extends Component {
   render(){
     let keys = Object.keys(this.state.shelves);
     return (
-        <div className="list-books">
+        <div className="list-books" ref="root">
           <div className="list-books-title">
             <h1>MyReads</h1>
           </div>
