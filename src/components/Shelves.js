@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import Shelf from './Shelf';
 import Loader from 'react-loader';
 import LinearProgress from 'material-ui/LinearProgress';
+import PropTypes from 'prop-types';
 
 
 const Shelves = (props) => {
@@ -28,6 +29,13 @@ const Shelves = (props) => {
       </div>
 
   );
+}
+
+Shelves.propTypes = {
+  onUpdate: PropTypes.func.isRequired,
+  shelves: PropTypes.object.isRequired,
+  loaded: PropTypes.bool.isRequired,
+  updating: PropTypes.bool.isRequired
 }
 
 export default Shelves;

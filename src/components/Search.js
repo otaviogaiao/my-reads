@@ -6,6 +6,7 @@ import Book from './Book';
 import {debounce} from 'throttle-debounce';
 import Loader from 'react-loader';
 import LinearProgress from 'material-ui/LinearProgress';
+import PropTypes from 'prop-types';
 
 
 class Search extends Component {
@@ -73,6 +74,12 @@ class Search extends Component {
       </div>
     );
   }
+}
+
+Search.propTypes = {
+  shelves: PropTypes.object.isRequired,
+  updating: PropTypes.bool.isRequired,
+  onUpdate: PropTypes.func.isRequired
 }
 
 export default Search;
