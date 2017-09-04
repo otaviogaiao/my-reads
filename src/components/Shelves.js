@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom';
 import * as BooksAPI from '../BooksAPI';
 import Shelf from './Shelf';
 import Loader from 'react-loader';
+import LinearProgress from 'material-ui/LinearProgress';
 
 class Shelves extends Component {
 
@@ -12,10 +13,12 @@ class Shelves extends Component {
         wantToRead: [],
         currentlyReading: []
       },
-      loaded: false
+      loaded: false,
+      updating: false
   }
 
   removeBookFromShelf = (book, shelf) => {
+    this.refs.root && this.setState({updating: true})
     let oldShelf = book.shelf;
     book.shelf = shelf;
     if(shelf !== 'none'){
@@ -25,12 +28,16 @@ class Shelves extends Component {
         }
       )
     }
-    this.setState((prevState) => {
+    this.refs.root && this.setState((prevState) => {
         prevState.shelves[oldShelf] = prevState.shelves[oldShelf].filter((b) =>  b.id !== book.id);
         return prevState;
       }
     )
-    BooksAPI.update(book, shelf).catch((erro) => console.log(erro))
+    BooksAPI.update(book, shelf).then(() => this.refs.root && this.setState({updating: false}))
+      .catch((erro) => {
+        console.log(erro);
+        this.refs.root && this.setState({updating: false});
+      })
   }
 
   componentDidMount(){
@@ -73,6 +80,7 @@ class Shelves extends Component {
             <h1>MyReads</h1>
           </div>
         <Loader loaded={this.state.loaded}>
+            {this.state.updating && <LinearProgress mode="indeterminate" color="#FFFF00"/>}
             <div className="list-books-content">
               <div>
                 { keys.map((key) => <Shelf books={this.state.shelves[key]} shelf={key} key={key} shelves={keys} removeBookFromShelf={this.removeBookFromShelf}

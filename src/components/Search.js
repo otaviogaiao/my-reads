@@ -5,6 +5,7 @@ import SearchBar from './SearchBar';
 import Book from './Book';
 import {debounce} from 'throttle-debounce';
 import Loader from 'react-loader';
+import LinearProgress from 'material-ui/LinearProgress';
 
 
 class Search extends Component {
@@ -15,7 +16,8 @@ class Search extends Component {
       books: [],
       myBooks: [],
       shelves: ['read', 'wantToRead', 'currentlyReading'],
-      loaded: true
+      loaded: true,
+      updating: false
     }
     // this.searchBooks = this.searchBooks.bind(this);
     this.searchBooks = debounce(400,this.searchBooks);
@@ -41,12 +43,13 @@ class Search extends Component {
   }
 
   changeBookShelf = (book, shelf) => {
+    this.refs.root && this.setState({updating: true});
     BooksAPI.update(book, shelf).then((data) => {
       if(book.shelf !== 'none' && shelf === 'none'){
-        this.refs.root &&  this.setState((prevState) => ({myBooks: prevState.myBooks.filter((b) => b.id !== book.id)}))
+        this.refs.root &&  this.setState((prevState) => ({myBooks: prevState.myBooks.filter((b) => b.id !== book.id), updating: false}))
       }else{
         book.shelf = shelf;
-        this.refs.root && this.setState((prevState) => ({myBooks: prevState.myBooks.concat([book])}))
+        this.refs.root && this.setState((prevState) => ({myBooks: prevState.myBooks.concat([book]), updating: false}))
       }
     })
   }
@@ -75,9 +78,11 @@ class Search extends Component {
           <SearchBar searchBookHandler={this.searchBooks}/>
         </div>
         <div className="search-books-results">
+        {this.state.updating && <LinearProgress mode="indeterminate" color="#FFFF00"/>}
           <Loader loaded={this.state.loaded}>
             <ol className="books-grid">
-              {this.state.books && this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf} shelves={this.state.shelves}/>)}
+              {this.state.books.length > 0 ? this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf} shelves={this.state.shelves}/>) :
+               <p>No books found. Type something to search.</p>}
             </ol>
           </Loader>
         </div>
