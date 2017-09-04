@@ -62,3 +62,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
 
 For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Running this project
+
+In order to run this project, you need to have NPM or YARN installed on your machine. Download the project, open the terminal and go to the project's folder. Then run npm install or yarn install. Once all dependencies finish downloading, just type npm start or yarn start. Done, the webpage should open automatically.
+
+
