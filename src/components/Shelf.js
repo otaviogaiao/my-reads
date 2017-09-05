@@ -1,30 +1,29 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Book from './Book';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
-class Shelf extends Component {
-
-  handleChangeShelf = (book, shelf) =>{
-    this.props.removeBookFromShelf(book, shelf);
-  }
-
-
-  render(){
+const Shelf = (props) => {
     return (
       <div className="bookshelf">
-        <h2 className="bookshelf-title">{_.startCase(this.props.shelf)}</h2>
+        <h2 className="bookshelf-title">{_.startCase(props.shelf)}</h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {this.props.books.length > 0 ? this.props.books.map((book) =>
+            {props.books.length > 0 ? props.books.map((book) =>
               (<li key={book.id}>
-                <Book book={book} key={book.id} handleChangeShelf={this.handleChangeShelf} shelves={this.props.shelves}/>
+                <Book book={book} key={book.id} handleChangeShelf={props.updateBookFromShelf} shelves={props.shelves}/>
               </li>)) : <p>This shelf is empty</p>}
           </ol>
         </div>
       </div>
     );
-  }
-
 }
 
+
+Shelf.propTypes = {
+  shelf: PropTypes.string.isRequired,
+  books: PropTypes.array.isRequired,
+  updateBookFromShelf: PropTypes.func.isRequired,
+  shelves: PropTypes.array.isRequired
+}
 export default Shelf;

@@ -6,6 +6,7 @@ import Book from './Book';
 import {debounce} from 'throttle-debounce';
 import Loader from 'react-loader';
 import LinearProgress from 'material-ui/LinearProgress';
+import PropTypes from 'prop-types';
 
 
 class Search extends Component {
@@ -14,18 +15,9 @@ class Search extends Component {
     super(props);
     this.state = {
       books: [],
-      myBooks: [],
-      shelves: ['read', 'wantToRead', 'currentlyReading'],
-      loaded: true,
-      updating: false
+      loaded: true
     }
-    // this.searchBooks = this.searchBooks.bind(this);
     this.searchBooks = debounce(400,this.searchBooks);
-  }
-
-  componentDidMount(){
-    BooksAPI.getAll().then((books) => {this.refs.root && this.setState({myBooks: books})});
-
   }
 
   searchBooks = (query) =>{
@@ -42,27 +34,19 @@ class Search extends Component {
     }
   }
 
-  changeBookShelf = (book, shelf) => {
-    this.refs.root && this.setState({updating: true});
-    BooksAPI.update(book, shelf).then((data) => {
-      if(book.shelf !== 'none' && shelf === 'none'){
-        this.refs.root &&  this.setState((prevState) => ({myBooks: prevState.myBooks.filter((b) => b.id !== book.id), updating: false}))
-      }else{
-        book.shelf = shelf;
-        this.refs.root && this.setState((prevState) => ({myBooks: prevState.myBooks.concat([book]), updating: false}))
-      }
-    })
-  }
 
   setShelvesOnBooks(books){
-    if(this.state.myBooks.length > 0 && books.length > 0){
+    if(books.length > 0){
+      let keys = Object.keys(this.props.shelves);
       return books.map((book) => {
-        let index = this.state.myBooks.findIndex((b) => b.id === book.id);
-        if(index !== -1){
-          book.shelf = this.state.myBooks[index].shelf;
-        }else{
-          book.shelf = 'none'
+        for(let key of keys){
+          let index = this.props.shelves[key].findIndex((b) => b.id === book.id);
+          if(index !== -1){
+            book.shelf = key;
+            return book;
+          }
         }
+        book.shelf = 'none';
         return book;
       })
     }
@@ -71,6 +55,7 @@ class Search extends Component {
 
 
   render(){
+    let keys = Object.keys(this.props.shelves);
     return (
       <div className="search-books" ref="root">
         <div className="search-books-bar">
@@ -78,10 +63,10 @@ class Search extends Component {
           <SearchBar searchBookHandler={this.searchBooks}/>
         </div>
         <div className="search-books-results">
-        {this.state.updating && <LinearProgress mode="indeterminate" color="#FFFF00"/>}
+        {this.props.updating && <LinearProgress mode="indeterminate" color="#FFFF00"/>}
           <Loader loaded={this.state.loaded}>
             <ol className="books-grid">
-              {this.state.books.length > 0 ? this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.changeBookShelf} shelves={this.state.shelves}/>) :
+              {this.state.books.length > 0 ? this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.props.onUpdate} shelves={keys}/>) :
                <p>No books found. Type something to search.</p>}
             </ol>
           </Loader>
@@ -89,6 +74,12 @@ class Search extends Component {
       </div>
     );
   }
+}
+
+Search.propTypes = {
+  shelves: PropTypes.object.isRequired,
+  updating: PropTypes.bool.isRequired,
+  onUpdate: PropTypes.func.isRequired
 }
 
 export default Search;

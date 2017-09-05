@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Modal from './Modal';
 import StarRatingComponent from 'react-star-rating-component';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 class Book extends Component {
 
@@ -37,7 +38,8 @@ class Book extends Component {
   }
 
   render(){
-    let image = `url("${this.props.book.imageLinks.smallThumbnail}")`;
+    let {book} = this.props;
+    let image = `url("${book.imageLinks.smallThumbnail}")`;
     return (
         <div className="book">
           <div className="book-top">
@@ -52,24 +54,30 @@ class Book extends Component {
               </select>
             </div>
           </div>
-          <div className="book-title">{this.props.book.title}</div>
+          <div className="book-title">{book.title}</div>
           <div className="book-authors">
-            {this.props.book.authors && this.props.book.authors.map((author, index) => <span key={index}>{author}</span>)}
+            {book.authors && book.authors.map((author, index) => <span key={index}>{author}</span>)}
           </div>
           <StarRatingComponent
-                    name={this.props.book.id}
+                    name={book.id}
                     starCount={5}
-                    value={this.props.book.averageRating}
+                    value={book.averageRating}
                     starColor={this.state.starColor}
                     onStarClick={(e)=>{this.changeRating(e)}}
           />
           <div>
             <span onClick={() => this.openModal()} className="book-detail-link">See details</span>
           </div>
-          {this.state.modalOpen && <Modal book={this.props.book} onClose={this.closeModal}/>}
+          {this.state.modalOpen && <Modal book={book} onClose={this.closeModal}/>}
       </div>
     )
   }
+}
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  handleChangeShelf: PropTypes.func.isRequired,
+  shelves: PropTypes.array.isRequired
 }
 
 export default Book;
