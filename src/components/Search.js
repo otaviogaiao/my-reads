@@ -21,7 +21,7 @@ class Search extends Component {
   }
 
   searchBooks = (query) =>{
-    if(query.length > 2){
+    if(query.length > 0){
       this.setState({loaded: false})
       BooksAPI.search(query, 20).then((books) => {
        if(books.error){
@@ -66,7 +66,8 @@ class Search extends Component {
         {this.props.updating && <LinearProgress mode="indeterminate" color="#FFFF00"/>}
           <Loader loaded={this.state.loaded}>
             <ol className="books-grid">
-              {this.state.books.length > 0 ? this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.props.onUpdate} shelves={keys}/>) :
+              {this.state.books.length > 0 ? this.state.books.map((book) => <Book book={book} key={book.id} handleChangeShelf={this.props.onUpdate} 
+              shelves={keys} updateRating={this.props.updateRating}/>) :
                <p>No books found. Type something to search.</p>}
             </ol>
           </Loader>

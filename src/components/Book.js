@@ -33,7 +33,8 @@ class Book extends Component {
 
 //O rating vai se perder ao trocar ou recarregar a tela pois a API não fornece função para alterar isso no servidor
   changeRating(e){
-    this.setState({rating: e, starColor: '#FF0000'})
+    this.setState({starColor: '#FF0000'})
+    this.props.updateRating(e, this.props.book);
     //chama função de alterar Rating no servidor
   }
 
@@ -77,7 +78,8 @@ class Book extends Component {
 Book.propTypes = {
   book: PropTypes.object.isRequired,
   handleChangeShelf: PropTypes.func.isRequired,
-  shelves: PropTypes.array.isRequired
+  shelves: PropTypes.array.isRequired,
+  updateRating: PropTypes.func.isRequired
 }
 
 export default Book;

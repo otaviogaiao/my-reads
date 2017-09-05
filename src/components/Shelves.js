@@ -19,7 +19,7 @@ const Shelves = (props) => {
           <div className="list-books-content">
             <div>
               { keys.map((key) => <Shelf books={shelves[key]} shelf={key} key={key} shelves={keys} updateBookFromShelf={props.onUpdate}
-                                    />) }
+                                   updateRating={props.updateRating} />) }
             </div>
           </div>
           <div className="open-search">

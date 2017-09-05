@@ -1,0 +1,18 @@
+.not-found {
+    background-color: #1565C0;
+    position: absolute;
+    color: #FAFAFA;
+    width: 100vw;
+    height: 100vh;
+}
+
+.not-found-content {
+    text-align: center;
+}
+
+.not-found a{
+    text-decoration-line: none;
+    text-decoration-color: none;
+    text-decoration-style: none;
+    color: #FAFAFA;
+}

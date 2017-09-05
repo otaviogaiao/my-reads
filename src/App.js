@@ -1,9 +1,10 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import './App.css';
 import Search from './components/Search';
 import Shelves from './components/Shelves';
 import * as BooksAPI from './BooksAPI';
+import NotFound from './components/NotFound';
 
 class BooksApp extends React.Component {
 
@@ -62,15 +63,32 @@ class BooksApp extends React.Component {
       .then(() => {this.setState({updating: false});})
   }
 
+  updateRating = (e, book) => {
+    if(book.shelf !== 'none'){
+      book.averageRating = e;
+      this.setState((prevState) => {
+         let { shelves } = prevState;
+         let index = shelves[book.shelf].findIndex((b) => b.id === book.id)
+         if(index !== -1){
+           shelves[book.shelf][index].averageRating = e;
+         }
+         return {shelves};
+      })
+    }
+  }
+
   render() {
     return (
         <div className="app">
-          <Route exact path="/" render={ () => {
-            return <Shelves onUpdate={this.updateBookFromShelf} shelves={this.state.shelves} 
-            loaded={this.state.loaded} updating={this.state.updating}/>
-            }} />
-          <Route exact path="/search" render={ () => {return <Search shelves={this.state.shelves} 
-          onUpdate={this.updateBookFromShelf} updating={this.state.updating}/>}} />
+          <Switch>
+            <Route exact path="/" render={ () => {
+              return <Shelves onUpdate={this.updateBookFromShelf} shelves={this.state.shelves} 
+              loaded={this.state.loaded} updating={this.state.updating} updateRating={this.updateRating}/>
+              }} />
+            <Route exact path="/search" render={ () => {return <Search shelves={this.state.shelves} 
+            onUpdate={this.updateBookFromShelf} updating={this.state.updating} updateRating={this.updateRating}/>}} />
+            <Route component={NotFound} />
+          </Switch>
         </div>
     )
   }

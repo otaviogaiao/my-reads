@@ -11,7 +11,7 @@ const Shelf = (props) => {
           <ol className="books-grid">
             {props.books.length > 0 ? props.books.map((book) =>
               (<li key={book.id}>
-                <Book book={book} key={book.id} handleChangeShelf={props.updateBookFromShelf} shelves={props.shelves}/>
+                <Book book={book} key={book.id} handleChangeShelf={props.updateBookFromShelf} shelves={props.shelves} updateRating={props.updateRating}/>
               </li>)) : <p>This shelf is empty</p>}
           </ol>
         </div>
@@ -24,6 +24,7 @@ Shelf.propTypes = {
   shelf: PropTypes.string.isRequired,
   books: PropTypes.array.isRequired,
   updateBookFromShelf: PropTypes.func.isRequired,
-  shelves: PropTypes.array.isRequired
+  shelves: PropTypes.array.isRequired,
+  updateRating: PropTypes.func.isRequired
 }
 export default Shelf;
